@@ -22,7 +22,7 @@ class AppController extends Controller
             $data['bannervideo'] = $video[0]->download_link;
         }
         $data['content'] = Homepage::find(1)->makeHidden(['id','created_at','updated_at']);
-        $data['shop'] = Shop::where('order','<',7)->orderBy('order')->get()->makeHidden(['id','created_at','updated_at','order']);
+        $data['shop'] = Shop::getData()->take(6)->orderBy('order')->get()->makeHidden(['id','created_at','updated_at','order']);
         $data['testimonial'] = Testimonial::all()->makeHidden(['id','created_at','updated_at','order']);
         $data['about'] = About::getData()->orderBy('order')->get()->makeHidden(['id','created_at','updated_at','order']);
         return response([
@@ -36,6 +36,17 @@ class AppController extends Controller
         $about = &$data['about'];
         $about['basic'] = About::getBasicData()->first();
         $about['items'] = About::getData()->orderBy('order')->get()->makeHidden(['id','created_at','updated_at','order']);
+        return response([
+            'message'=> "Data Fetched Successfully",
+            'data'=> $data
+        ],200);
+    }
+    
+    public function getShopData(){
+        $data = [];
+        $shop = &$data['shop'];
+        $shop['basic'] = Shop::getBasicData()->first();
+        $shop['items'] = Shop::getData()->orderBy('order')->get()->makeHidden(['id','created_at','updated_at','order']);
         return response([
             'message'=> "Data Fetched Successfully",
             'data'=> $data
