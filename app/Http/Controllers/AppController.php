@@ -73,4 +73,47 @@ class AppController extends Controller
             'data'=> $data
         ],200);
     }
+
+    public function contactForm(Request $request){
+        try{
+            $validate = Validator::make($request->all(),[
+                'formData.name'=>'required',
+                'formData.contact_number' => 'required',
+                'formData.email'=>'email|required',
+                'formData.message' => 'min:10'
+            ],[],[
+                'formData.name'=>'Full Name',
+                'formData.contact_number'=>"Contact Number",
+                'formData.message'=>'Message',
+                'formData.email'=>'Email',
+            ]);
+            if($validate->fails()){
+                return response([
+                    'message'=>'Validation Failed',
+                    'errors'=>array_merge(...collect($validate->errors())->map(function($item){
+                        return $item;
+
+                    })->values())
+                ]);
+            }
+            $data = $request->formData;
+            $email = Contact::where('id',1)->first();
+            Mail::send('mail.contact-form', ['data'=>$data] , function($message) use ($data, $email)
+            {
+                $message->from('contact-form@aamakoachar.com');
+                $message->to($email['email'])->subject('Message From '.$data['email']);
+            });
+            return response([
+                "message"=>"Successfully Submitted, Thankyou!"
+            ],200);
+         }
+         catch(Exception $e){
+            return response([
+                "errors"=>$e->getMessage()
+            ]);
+         }
+
+    }
 }
+
+
