@@ -8,6 +8,7 @@ use App\Homepage;
 use App\Testimonial;
 use App\Shop;
 use App\About;
+use App\Contact;
 
 class AppController extends Controller
 {
@@ -47,6 +48,14 @@ class AppController extends Controller
         $shop = &$data['shop'];
         $shop['basic'] = Shop::getBasicData()->first();
         $shop['items'] = Shop::getData()->orderBy('order')->get()->makeHidden(['id','created_at','updated_at','order']);
+        return response([
+            'message'=> "Data Fetched Successfully",
+            'data'=> $data
+        ],200);
+    }
+
+    public function getContactData(){
+        $data['contact'] = Contact::where('id',1)->first()->makeHidden(['id','created_at','updated_at']);
         return response([
             'message'=> "Data Fetched Successfully",
             'data'=> $data

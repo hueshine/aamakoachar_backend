@@ -18,6 +18,7 @@ use App\Http\Controllers\AppController;
 Route::get('homepage',[AppController::class,'getHomePageData'])->name('homepage');
 Route::get('about',[AppController::class,'getAboutUsData'])->name('about');
 Route::get('shops',[AppController::class,'getShopData'])->name('shop');
+Route::get('contact',[AppController::class,'getContactData'])->name('contact');
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
