@@ -9,6 +9,7 @@ use App\Testimonial;
 use App\Shop;
 use App\About;
 use App\Contact;
+use App\Product;
 
 class AppController extends Controller
 {
@@ -56,6 +57,17 @@ class AppController extends Controller
 
     public function getContactData(){
         $data['contact'] = Contact::where('id',1)->first()->makeHidden(['id','created_at','updated_at']);
+        return response([
+            'message'=> "Data Fetched Successfully",
+            'data'=> $data
+        ],200);
+    }
+
+    public function getProductData(){
+        $data = [];
+        $product = &$data['product'];
+        $product['basic'] = Product::getBasicData()->first();
+        $product['items'] = Product::getData()->orderBy('order')->get()->makeHidden(['id','created_at','updated_at','order']);
         return response([
             'message'=> "Data Fetched Successfully",
             'data'=> $data
