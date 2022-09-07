@@ -10,6 +10,7 @@ use App\Shop;
 use App\About;
 use App\Contact;
 use App\Product;
+use Mail;
 use Illuminate\Support\Facades\Validator;
 
 class AppController extends Controller
